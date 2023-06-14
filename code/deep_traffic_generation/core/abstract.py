@@ -6,8 +6,7 @@ from xmlrpc.client import boolean
 import numpy as np
 import torch
 import torch.nn as nn
-from pytorch_lightning import LightningModule
-from pytorch_lightning.utilities.types import EPOCH_OUTPUT
+from lightning.pytorch import LightningModule
 from torch.distributions.distribution import Distribution
 from torch.distributions import Independent, Normal
 from torch.nn import functional as F
@@ -281,7 +280,7 @@ class AE(Abstract):
         self.log("hp/test_loss", loss)
         return x, x_hat, info
 
-    def test_epoch_end(self, outputs: EPOCH_OUTPUT) -> None:
+    def test_epoch_end(self, outputs) -> None:
         """FIXME: too messy."""
         idx = 0
         original = outputs[0][0][idx].unsqueeze(0).cpu()

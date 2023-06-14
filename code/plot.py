@@ -105,7 +105,7 @@ def plot_generation_tcvae(latent_space_path: str, traf_gen1_path: str, traf_gen2
     copy_traf_1 = traf_gen1
     a = copy_traf_1["TRAJ_0"].assign(flight_id="TRAJ_999")
     copy_traf_1 = copy_traf_1 + a
-
+ 
     copy_traf_2 = traf_gen2
     b = copy_traf_2["TRAJ_0"].assign(flight_id="TRAJ_999")
     copy_traf_2 = copy_traf_2 + b

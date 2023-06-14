@@ -1,11 +1,11 @@
 # flake8: noqa
 from argparse import ArgumentParser
 
-import pytorch_lightning as pl
-from pytorch_lightning import LightningModule, Trainer
-from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
-from pytorch_lightning.core.lightning import LightningModule
-from pytorch_lightning.loggers import TensorBoardLogger
+import lightning.pytorch as pl
+from lightning.pytorch import LightningModule, Trainer
+from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
+from lightning.pytorch import LightningModule
+from lightning.pytorch.loggers import TensorBoardLogger
 from sklearn.preprocessing import MinMaxScaler
 
 from .abstract import AE, VAE
@@ -44,8 +44,10 @@ def cli_main(
     parser.add_argument(
         "--early_stop", dest="early_stop", type=int, default=None
     )
+    parser.add_argument(
+        "--gradient_clip_val", dest="gradient_clip_val", type=float, default=0
+    )
     parser = dataset_cls.add_argparse_args(parser)
-    parser = Trainer.add_argparse_args(parser)
     parser, _ = cls.add_model_specific_args(parser)
     args = parser.parse_args()
 
@@ -95,15 +97,15 @@ def cli_main(
         early_stopping = EarlyStopping(
             "hp/valid_loss", patience=args.early_stop
         )
-        trainer = Trainer.from_argparse_args(
-            args,
+        trainer = Trainer(
+            gradient_clip_val=args.gradient_clip_val,
             callbacks=[checkpoint_callback, early_stopping],
             logger=tb_logger,
             # deterministic=True,
         )
     else:
-        trainer = Trainer.from_argparse_args(
-            args,
+        trainer = Trainer(
+            gradient_clip_val=args.gradient_clip_val,
             callbacks=[checkpoint_callback],
             logger=tb_logger,
             # deterministic=True,

@@ -17,6 +17,13 @@ Outputs:
     - Traffic object of generated trajectories for TCVAE (flow 2)
 
 """
+# fixing posix path error for windows
+# check if current os is windows
+import os
+if os.name == 'nt':
+    import pathlib
+    temp = pathlib.PosixPath
+    pathlib.PosixPath = pathlib.WindowsPath
 
 import click
 from typing import List
@@ -82,7 +89,8 @@ def reconstruction(dataset_fcvae: TrafficDataset,
     g_fcvae: Generation, 
     g_tcvae: Generation,
     traffic_name: str, 
-    j: int = 10795):
+    j: int = 0):
+    # j: int = 10795):
     
     traffic = Traffic.from_file("../data/" + traffic_name)
 
@@ -159,7 +167,7 @@ def clustering(t_fcvae: SingleStageVAE,
 
     return Z_embedded_fcvae, Z_embedded_tcvae, traffics_fcvae, traffics_tcvae
 
-#Generate in within particular VampPrior componenents for TCVAE
+#Generate in within particular VampPrior components for TCVAE
 def generate_vamp_tcvae(training_data: TrafficDataset, t: SingleStageVAE, g: Generation, indexes: List[int], n_gen: int = 100):
 
     #Calculating Pseudo-inputs

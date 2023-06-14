@@ -83,6 +83,7 @@ class NormalLSR(LSR):
     def forward(self, hidden) -> Distribution:
         loc = self.z_loc(hidden)
         log_var = self.z_log_var(hidden)
+        # Check if loc has any incorrect values that don't satisfy Real() of pytorch
         return Independent(self.dist(loc, (log_var / 2).exp()), 1)
 
     def dist_params(self, p: Independent) -> List[torch.Tensor]:
